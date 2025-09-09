@@ -1,9 +1,13 @@
 package com.example.devsphere_backend.post;
 
+import com.example.devsphere_backend.comment.Comment;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
 @Entity
 public class Post {
     @Id
@@ -20,11 +24,14 @@ public class Post {
 
     private LocalDateTime createdAt;
     private int likes;
-    private int comments;
+    private int commentsCount;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> commentsList = new ArrayList<>();
 
     public Post(){}
 
-    public Post(int id, String author, String content, String imageURL, String codeContent, LocalDateTime createdAt, int likes, int comments){
+    public Post(int id, String author, String content, String imageURL, String codeContent, LocalDateTime createdAt, int likes, int commentsCount, List<Comment> commentsList){
         this.id = id;
         this.author = author;
         this.content = content;
@@ -32,17 +39,19 @@ public class Post {
         this.codeContent = codeContent;
         this.createdAt = createdAt;
         this.likes = likes;
-        this.comments = comments;
+        this.commentsCount = commentsCount;
+        this.commentsList = commentsList;
     }
 
-    public Post(String author, String content, String imageURL, String codeContent, LocalDateTime createdAt, int likes, int comments){
+    public Post(String author, String content, String imageURL, String codeContent, LocalDateTime createdAt, int likes, int commentsCount, List<Comment> commentsList){
         this.author = author;
         this.content = content;
         this.imageURL = imageURL;
         this.codeContent = codeContent;
         this.createdAt = createdAt;
         this.likes = likes;
-        this.comments = comments;
+        this.commentsCount = commentsCount;
+        this.commentsList = commentsList;
     }
 
     public int getId() {
@@ -101,12 +110,20 @@ public class Post {
         this.likes = likes;
     }
 
-    public int getComments() {
-        return comments;
+    public int getCommentsCount() {
+        return commentsCount;
     }
 
-    public void setComments(int comments) {
-        this.comments = comments;
+    public void setCommentsCount(int commentsCount) {
+        this.commentsCount = commentsCount;
+    }
+
+    public List<Comment> getCommentsList() {
+        return commentsList;
+    }
+
+    public void setCommentsList(List<Comment> commentsList) {
+        this.commentsList = commentsList;
     }
 
     @Override
@@ -119,7 +136,9 @@ public class Post {
                 ", codeContent='" + codeContent + '\'' +
                 ", createdAt=" + createdAt +
                 ", likes=" + likes +
-                ", comments=" + comments +
+                ", comments=" + commentsCount +
+                ", commentsList=" + commentsList +
                 '}';
     }
+
 }

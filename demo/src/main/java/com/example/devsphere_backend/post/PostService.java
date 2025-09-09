@@ -7,8 +7,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class PostService {
     private PostRepository postRepository;
@@ -23,7 +21,12 @@ public class PostService {
         return postRepository.findAll(pageable);
     }
 
-    public void insertPost(Post post) {
+    public Post insertPost(Post post) {
         postRepository.save(post);
+        return post;
+    }
+
+    public Post getPostById(Long id) {
+        return postRepository.findById(id).get();
     }
 }
