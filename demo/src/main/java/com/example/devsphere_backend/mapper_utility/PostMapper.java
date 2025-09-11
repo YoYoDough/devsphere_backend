@@ -5,8 +5,6 @@ import com.example.devsphere_backend.comment.CommentDTO;
 import com.example.devsphere_backend.post.Post;
 import com.example.devsphere_backend.post.PostDTO;
 
-import java.util.stream.Collectors;
-
 public class PostMapper {
     public static PostDTO toDTO(Post post, boolean includeComments) {
         PostDTO dto = new PostDTO();
@@ -16,8 +14,9 @@ public class PostMapper {
         dto.setCodeContent(post.getCodeContent());
         dto.setImageURL(post.getImageURL());
         dto.setCreatedAt(post.getCreatedAt());
-        dto.setLikes(post.getLikes());
+        dto.setLikesCount(post.getLikesCount());
         dto.setCommentsCount(post.getCommentsList().size());
+
 
         if (includeComments) {
             dto.setCommentsList(

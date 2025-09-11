@@ -12,12 +12,12 @@ public class PostDTO {
     private String imageURL;
     private String codeContent;
     private LocalDateTime createdAt;
-    private int likes;
     private int commentsCount;
+
+    private long likesCount;
 
     // Optional: only include full comments when fetching a single post
     private List<CommentDTO> commentsList; // rename field to match getter/setter
-
     // Getters / Setters
 
     public int getId() { return id; }
@@ -38,12 +38,18 @@ public class PostDTO {
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 
-    public int getLikes() { return likes; }
-    public void setLikes(int likes) { this.likes = likes; }
-
     public int getCommentsCount() { return commentsCount; }
     public void setCommentsCount(int commentsCount) { this.commentsCount = commentsCount; }
 
     public List<CommentDTO> getCommentsList() { return commentsList; }
     public void setCommentsList(List<CommentDTO> commentsList) { this.commentsList = commentsList; }
+
+    public long getLikesCount() {
+        return likesCount;
+    }
+
+    public void setLikesCount(long likesCount) {
+        this.likesCount = likesCount;
+    }
+
 }

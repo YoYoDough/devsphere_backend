@@ -23,33 +23,34 @@ public class Post {
     private String codeContent;
 
     private LocalDateTime createdAt;
-    private int likes;
     private int commentsCount;
+
+    // Likes list — one-to-many
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Like> likesList = new ArrayList<>();
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> commentsList = new ArrayList<>();
 
     public Post(){}
 
-    public Post(int id, String author, String content, String imageURL, String codeContent, LocalDateTime createdAt, int likes, int commentsCount, List<Comment> commentsList){
+    public Post(int id, String author, String content, String imageURL, String codeContent, LocalDateTime createdAt, int commentsCount, List<Comment> commentsList){
         this.id = id;
         this.author = author;
         this.content = content;
         this.imageURL = imageURL;
         this.codeContent = codeContent;
         this.createdAt = createdAt;
-        this.likes = likes;
         this.commentsCount = commentsCount;
         this.commentsList = commentsList;
     }
 
-    public Post(String author, String content, String imageURL, String codeContent, LocalDateTime createdAt, int likes, int commentsCount, List<Comment> commentsList){
+    public Post(String author, String content, String imageURL, String codeContent, LocalDateTime createdAt, int commentsCount, List<Comment> commentsList){
         this.author = author;
         this.content = content;
         this.imageURL = imageURL;
         this.codeContent = codeContent;
         this.createdAt = createdAt;
-        this.likes = likes;
         this.commentsCount = commentsCount;
         this.commentsList = commentsList;
     }
@@ -102,13 +103,6 @@ public class Post {
         this.createdAt = createdAt;
     }
 
-    public int getLikes() {
-        return likes;
-    }
-
-    public void setLikes(int likes) {
-        this.likes = likes;
-    }
 
     public int getCommentsCount() {
         return commentsCount;
@@ -126,6 +120,25 @@ public class Post {
         this.commentsList = commentsList;
     }
 
+    public Long getLikesCount() {
+        if (likesList == null){
+            return 0L;
+        }
+        Long size = (long) likesList.size();
+        return size;
+    }
+
+    public void addLike(Like like) {
+        likesList.add(like);
+        like.setPost(this);
+    }
+
+    public List<Like> getLikesList() {
+        if (likesList == null) likesList = new ArrayList<>();
+        return likesList;
+    }
+    public void setLikesList(List<Like> likesList) { this.likesList = likesList; }
+
     @Override
     public String toString() {
         return "Post{" +
@@ -135,7 +148,7 @@ public class Post {
                 ", imageURL='" + imageURL + '\'' +
                 ", codeContent='" + codeContent + '\'' +
                 ", createdAt=" + createdAt +
-                ", likes=" + likes +
+                ", likesCount=" + getLikesCount() +
                 ", comments=" + commentsCount +
                 ", commentsList=" + commentsList +
                 '}';
