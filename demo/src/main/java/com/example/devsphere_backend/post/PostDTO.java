@@ -2,6 +2,7 @@ package com.example.devsphere_backend.post;
 
 import com.example.devsphere_backend.comment.CommentDTO;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -11,7 +12,7 @@ public class PostDTO {
     private String content;
     private String imageURL;
     private String codeContent;
-    private LocalDateTime createdAt;
+    private Instant createdAt;
     private int commentsCount;
 
     private long likesCount;
@@ -35,8 +36,8 @@ public class PostDTO {
     public String getCodeContent() { return codeContent; }
     public void setCodeContent(String codeContent) { this.codeContent = codeContent; }
 
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+    public Instant getCreatedAt() { return createdAt; }
+    public void setCreatedAt(Instant createdAt) { this.createdAt = createdAt; }
 
     public int getCommentsCount() { return commentsCount; }
     public void setCommentsCount(int commentsCount) { this.commentsCount = commentsCount; }

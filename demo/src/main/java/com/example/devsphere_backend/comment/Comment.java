@@ -1,9 +1,14 @@
 package com.example.devsphere_backend.comment;
 
+import com.example.devsphere_backend.post.Like;
 import com.example.devsphere_backend.post.Post;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Comment {
@@ -13,7 +18,10 @@ public class Comment {
 
     private String text;
     private String author; // or a User entity if you have authentication
-    private LocalDateTime createdAt;
+    private Long likes;
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<LikeComment> likesList = new ArrayList<>();
+    private Instant createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
@@ -43,20 +51,33 @@ public class Comment {
         this.author = author;
     }
 
-    public Post getPost() {
-        return post;
-    }
-
-    public void setPost(Post post) {
-        this.post = post;
-    }
-
-    public LocalDateTime getCreatedAt() {
+    public Instant getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(Instant createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Long getLikes() {
+        return likes;
+    }
+
+    public void setLikes(Long likes) {
+        this.likes = likes;
+    }
+
+    public List<LikeComment> getLikesList() {
+        return likesList;
+    }
+
+    public void setLikesList(List<LikeComment> likesList) {
+        this.likesList = likesList;
+    }
+
+    // Optional helper
+    public int getLikesCount() {
+        return likesList.size();
     }
 
     @Override
@@ -65,8 +86,9 @@ public class Comment {
                 "id=" + id +
                 ", text='" + text + '\'' +
                 ", author='" + author + '\'' +
+                ", likes=" + likes +
+                ", likesList=" + likesList +
                 ", createdAt=" + createdAt +
-                ", post=" + post +
                 '}';
     }
 }

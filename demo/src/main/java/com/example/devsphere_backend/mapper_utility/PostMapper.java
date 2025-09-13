@@ -29,12 +29,13 @@ public class PostMapper {
         return dto;
     }
 
-    private static CommentDTO toCommentDTO(Comment comment) {
+    public static CommentDTO toCommentDTO(Comment comment) {
         CommentDTO dto = new CommentDTO();
         dto.setId(comment.getId());
         dto.setText(comment.getText());
         dto.setAuthor(comment.getAuthor());
         dto.setCreatedAt(comment.getCreatedAt());
+        dto.setLikes(comment.getLikes());
         return dto;
     }
 }

@@ -3,6 +3,7 @@ package com.example.devsphere_backend.post;
 import com.example.devsphere_backend.comment.Comment;
 import jakarta.persistence.*;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -22,7 +23,7 @@ public class Post {
     @Column(columnDefinition = "TEXT") // <-- allows long code content
     private String codeContent;
 
-    private LocalDateTime createdAt;
+    private Instant createdAt;
     private int commentsCount;
 
     // Likes list — one-to-many
@@ -34,7 +35,7 @@ public class Post {
 
     public Post(){}
 
-    public Post(int id, String author, String content, String imageURL, String codeContent, LocalDateTime createdAt, int commentsCount, List<Comment> commentsList){
+    public Post(int id, String author, String content, String imageURL, String codeContent, Instant createdAt, int commentsCount, List<Comment> commentsList){
         this.id = id;
         this.author = author;
         this.content = content;
@@ -45,7 +46,7 @@ public class Post {
         this.commentsList = commentsList;
     }
 
-    public Post(String author, String content, String imageURL, String codeContent, LocalDateTime createdAt, int commentsCount, List<Comment> commentsList){
+    public Post(String author, String content, String imageURL, String codeContent, Instant createdAt, int commentsCount, List<Comment> commentsList){
         this.author = author;
         this.content = content;
         this.imageURL = imageURL;
@@ -95,11 +96,11 @@ public class Post {
         this.codeContent = codeContent;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public Instant getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(Instant createdAt) {
         this.createdAt = createdAt;
     }
 
