@@ -1,6 +1,7 @@
 package com.example.devsphere_backend.post;
 
 
+import com.example.devsphere_backend.comment.CommentRepository;
 import com.example.devsphere_backend.mapper_utility.PostMapper;
 import com.example.devsphere_backend.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +22,13 @@ public class PostController {
         private final PostService postService;
 
         private UserRepository userRepository;
+        private CommentRepository commentRepository;
 
         @Autowired
-        public PostController(PostService postService, UserRepository userRepository) {
+        public PostController(PostService postService, UserRepository userRepository, CommentRepository commentRepository) {
             this.postService = postService;
             this.userRepository = userRepository;
+            this.commentRepository = commentRepository;
         }
 
         // ✅ Get paginated posts (without full comments list)
@@ -39,7 +42,10 @@ public class PostController {
 
             List<Post> posts = postService.getPosts(page, size).getContent();
             List<PostDTO> dtoList = posts.stream()
-                    .map(post -> PostMapper.toDTO(post, false)) // don’t include comments
+                    .map(post -> {
+                        System.out.println(post);
+                        return PostMapper.toDTO(post);
+                    })
                     .toList();
 
             return ResponseEntity.ok(dtoList);
@@ -49,14 +55,14 @@ public class PostController {
         @PostMapping
         public ResponseEntity<PostDTO> insertPost(@RequestBody Post post) {
             Post saved = postService.insertPost(post);
-            return ResponseEntity.ok(PostMapper.toDTO(saved, false));
+            return ResponseEntity.ok(PostMapper.toDTO(saved));
         }
 
         // ✅ Get a single post with full comments list
         @GetMapping("/{id}")
         public ResponseEntity<PostDTO> getPostById(@PathVariable Long id) {
             Post post = postService.getPostById(id);
-            return ResponseEntity.ok(PostMapper.toDTO(post, true)); // include comments
+            return ResponseEntity.ok(PostMapper.toDTO(post)); // include comments
         }
 
         @GetMapping("/{postId}/liked")

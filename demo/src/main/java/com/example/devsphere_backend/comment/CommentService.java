@@ -3,6 +3,7 @@ package com.example.devsphere_backend.comment;
 import com.example.devsphere_backend.post.Like;
 import com.example.devsphere_backend.post.Post;
 import com.example.devsphere_backend.post.PostRepository;
+import com.example.devsphere_backend.user.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -27,9 +28,11 @@ public class CommentService {
                 .orElseThrow(() -> new RuntimeException("Post not found"));
 
         Comment comment = new Comment();
+        comment.setPost(post);
         comment.setText(text);
         comment.setAuthor(author);
         comment.setLikes(likes);
+        comment.setCreatedAt(createdAt);
 
         return commentRepo.save(comment);
     }
@@ -40,10 +43,40 @@ public class CommentService {
         return post.getCommentsList();
     }
 
-    public Comment likeComment(long commentId){
+    public Comment likeComment(long commentId, User user){
         Comment comment = commentRepo.findById(commentId)
                 .orElseThrow(() -> new RuntimeException("Comment not found"));
-        comment.setLikes(comment.getLikes() + 1);
+
+        // Check if user already liked
+        boolean alreadyLiked = comment.getLikesList().stream()
+                .anyMatch(like -> like.getUser().getId() == (user.getId()));
+        if (!alreadyLiked) {
+            LikeComment like = new LikeComment();
+            like.setComment(comment);
+            like.setUser(user);
+            likeRepository.save(like);
+
+            comment.getLikesList().add(like); // optional if you fetch list later
+            comment.setLikes(comment.getLikes() + 1); // increment likes count if you use a field
+            commentRepo.save(comment);
+        }
+
+        return comment; // always return updated comment
+    }
+
+    public Comment unlikeComment(Long commentId, User user) {
+        Comment comment = commentRepo.findById(commentId)
+                .orElseThrow(() -> new RuntimeException("Comment not found"));
+        // Find the like entry
+        comment.getLikesList().stream()
+                .filter(like -> like.getUser().getId() == user.getId())
+                .findFirst()
+                .ifPresent(like -> {
+                    comment.getLikesList().remove(like);
+                    likeRepository.delete(like); // remove from DB
+                    comment.setLikes(Math.max(0, comment.getLikes() - 1));
+                });
+
         commentRepo.save(comment);
         return comment;
     }
@@ -61,4 +94,6 @@ public class CommentService {
                 .map(like -> like.getComment().getId())
                 .toList();
     }
+
+
 }

@@ -58,10 +58,6 @@ public class LikeComment {
 
     @Override
     public String toString() {
-        return "LikeComment{" +
-                "id=" + id +
-                ", comment=" + comment +
-                ", user=" + user +
-                '}';
+        return "LikeComment{id=" + id + ", userId=" + (user != null ? user.getId() : null) + "}";
     }
 }

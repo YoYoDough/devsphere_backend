@@ -11,6 +11,11 @@ public class CommentDTO {
     private String text;
     private String author;
     private Long likes;
+
+    private Boolean likedByUser; // optional
+
+    // getters and setters
+
     private Instant createdAt;
 
     public Long getId() {
@@ -52,4 +57,7 @@ public class CommentDTO {
     public void setLikes(Long likes) {
         this.likes = likes;
     }
+
+    public Boolean getLikedByUser() { return likedByUser; }
+    public void setLikedByUser(Boolean likedByUser) { this.likedByUser = likedByUser; }
 }

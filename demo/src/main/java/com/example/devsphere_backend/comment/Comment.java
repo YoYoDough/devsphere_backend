@@ -2,6 +2,7 @@ package com.example.devsphere_backend.comment;
 
 import com.example.devsphere_backend.post.Like;
 import com.example.devsphere_backend.post.Post;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
@@ -19,12 +20,20 @@ public class Comment {
     private String text;
     private String author; // or a User entity if you have authentication
     private Long likes;
+
+    @Override
+    public String toString() {
+        return "Comment{id=" + id + ", text='" + text + "', author='" + author + "'}";
+    }
+
     @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore // prevents infinite recursion
     private List<LikeComment> likesList = new ArrayList<>();
     private Instant createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
+    @JsonBackReference
     private Post post;
 
     public Long getId() {
@@ -80,15 +89,12 @@ public class Comment {
         return likesList.size();
     }
 
-    @Override
-    public String toString() {
-        return "Comment{" +
-                "id=" + id +
-                ", text='" + text + '\'' +
-                ", author='" + author + '\'' +
-                ", likes=" + likes +
-                ", likesList=" + likesList +
-                ", createdAt=" + createdAt +
-                '}';
+    public Post getPost() {
+        return post;
     }
+
+    public void setPost(Post post) {
+        this.post = post;
+    }
+
 }

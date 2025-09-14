@@ -18,8 +18,6 @@ public class PostDTO {
     private long likesCount;
 
     // Optional: only include full comments when fetching a single post
-    private List<CommentDTO> commentsList; // rename field to match getter/setter
-    // Getters / Setters
 
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
@@ -41,9 +39,6 @@ public class PostDTO {
 
     public int getCommentsCount() { return commentsCount; }
     public void setCommentsCount(int commentsCount) { this.commentsCount = commentsCount; }
-
-    public List<CommentDTO> getCommentsList() { return commentsList; }
-    public void setCommentsList(List<CommentDTO> commentsList) { this.commentsList = commentsList; }
 
     public long getLikesCount() {
         return likesCount;
